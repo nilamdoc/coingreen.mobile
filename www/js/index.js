@@ -29,6 +29,66 @@ Handlebars.registerHelper("debug", function(optionalValue) {
 });
 
 var domain = "http://coingreen.com";
+var footer = '<div class="container"><h4><a href="#" onclick="app.index();">Home</a> <a href="#" onclick="app.about();">About</a> <a href="#" onclick="app.contact();">Contact</a></h4></div>';
+var footerSignin = '<div class="container" style="border-bottom: double black;border-top:1px solid gray;margin-top:20px ">';
+		footerSignin = footerSignin +'	<ul class="nav  navbar-nav">';
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.logout();">Logout</a></li>';
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.balance();">Balance</a></li>';
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.send();">Send</a></li>	';
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.deposit();">Deposit</a></li>';		
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.withdraw();">Withdraw</a></li>';
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.download();">Download</a></li>';		
+		footerSignin = footerSignin +'		<li><a href="#" onclick="app.open();">Open Source</a></li>';		
+		footerSignin = footerSignin +'	</ul>';
+		footerSignin = footerSignin +'</div>';
+var footerLogout = '<div class="container" style="border-bottom: double black;border-top:1px solid gray;margin-top:20px ">';
+		footerLogout = footerLogout +'	<ul class="nav  navbar-nav">';
+		footerLogout = footerLogout +'		<li><a href="#" onclick="app.balance();">Balance</a></li>';
+		footerLogout = footerLogout +'		<li><a href="#" onclick="app.send();">Send</a></li>	';
+		footerLogout = footerLogout +'		<li><a href="#" onclick="app.deposit();">Deposit</a></li>';		
+		footerLogout = footerLogout +'		<li><a href="#" onclick="app.withdraw();">Withdraw</a></li>';
+		footerLogout = footerLogout +'		<li><a href="#" onclick="app.download();">Download</a></li>';		
+		footerLogout = footerLogout +'		<li><a href="#" onclick="app.open();">Open Source</a></li>';		
+		footerLogout = footerLogout +'	</ul>';
+		footerLogout = footerLogout +'</div>';
+var aboutus = '<div class="container"><h2>About us</h2><p>A group of developers who feel identification of virtual currency would make it easier for government to legalize it.</p><p>Please send your views to greencoin [AT] coingreen.org</p></div>';
+var contactus = '<div class="container"><h2>Contact us</h2><p>greencoin [AT] coingreen.org</p></div>';
+var html = '<div class="jumbotron container" style="text-align:center ">';
+html = html +'	<h1>Payments with CoinGreen</h1>';
+html = html +'	<p class="lead">Now you can pay with virtual currency (CoinGreen) to any email with ease!!!</p>';
+html = html +'	<p><a class="btn btn-lg btn-success" href="#" role="button" onclick="app.balance();" style="color:#000000">Get Free CoinGreens!</a></p>';
+html = html +'</div>';
+html = html +'<div class="row marketing">';
+html = html +'	<div class="col-lg-6">';
+html = html +'		<div style="min-height:100px " class="col-lg-12">';
+html = html +'			<a href="#"  onclick="app.balance();" class="btn btn-primary btn-lg btn-block" role="button" style="color:#000000">Check Balance / Login</a>';
+html = html +'			<p>Check balance of CoinGreens in your email account, if your email is not registered, we will just register it and give you 100 free coins.</p>';
+html = html +'		</div>';
+html = html +'		<div style="min-height:100px " class="col-lg-12">		';
+html = html +'			<a href="#" onclick="app.send();" class="btn btn-warning btn-lg btn-block" role="button" style="color:#000000">Send</a>';
+html = html +'			<p>Send CoinGreens to any email address, with just a click!</p>';
+html = html +'		</div>';
+html = html +'		<div style="min-height:100px " class="col-lg-12">						';
+html = html +'			<a href="#"  onclick="app.download();" class="btn btn-primary btn-lg btn-block" role="button" style="color:#000000">Download</a>';
+html = html +'			<p>Download CoinGreen client for Windows, Linux. We are developing for iOS too.</p>';
+html = html +'		</div>';
+html = html +'	</div>';
+html = html +'	<div class="col-lg-6">';
+html = html +'		<div style="min-height:100px " class="col-lg-12">					';
+html = html +'			<a href="#"  onclick="app.deposit();" class="btn btn-success btn-lg btn-block" role="button" style="color:#000000">Deposit</a>';
+html = html +'			<p>Deposit CoinGreens to your online wallet on CoinGreen.com for sending to a friend.</p>';
+html = html +'		</div>';
+html = html +'		<div style="min-height:100px " class="col-lg-12">				';
+html = html +'			<a href="#"  onclick="app.withdraw();" class="btn btn-danger btn-lg btn-block" role="button" style="color:#000000">Withdraw</a>';
+html = html +'			<p>Withdraw CoinGreens to your personal wallet!</p>';
+html = html +'		</div>';
+html = html +'		<div style="min-height:100px " class="col-lg-12">						';
+html = html +'			<a href="#"  onclick="app.open();" class="btn btn-primary btn-lg btn-block" role="button" style="color:#000000">Open Source</a>';
+html = html +'			<p>CoinGreen is an opensource project cloned from bitcoin. We would like you to take a look and collabarate to this revolution of payments made easy through emails. </p>';
+html = html +'		</div>';
+html = html +'	</div>';
+html = html +'</div>';
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -243,7 +303,11 @@ var app = {
 						+'"&format=json&callback=',
             type: 'GET',
             dataType: 'json',
-            success: function(data){},
+            success: function(data){
+							$("#home-content").html(html);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+						},
             error: function(data){
                 console.log(data);
             }
@@ -258,14 +322,144 @@ var app = {
 						+'"&format=json&callback=',
             type: 'GET',
             dataType: 'json',
-            success: function(data){},
+            success: function(data){
+			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>Balance</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
             error: function(data){
                 console.log(data);
             }
         });
-
 		},
-	
+		send: function(){
+				var  myURL = domain + "/send/index/json";
+        $.ajax({
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+						myURL
+						+'"&format=json&callback=',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>Send</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
+            error: function(data){
+                console.log(data);
+            }
+        });
+		},
+			deposit: function(){
+				var  myURL = domain + "/deposit/index/json";
+        $.ajax({
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+						myURL
+						+'"&format=json&callback=',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>Deposit</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
+            error: function(data){
+                console.log(data);
+            }
+        });
+		},
+		withdraw: function(){
+				var  myURL = domain + "/withdraw/index/json";
+        $.ajax({
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+						myURL
+						+'"&format=json&callback=',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>Withdraw</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
+            error: function(data){
+                console.log(data);
+            }
+        });
+		},
+		download: function(){
+				var  myURL = domain + "/download/index/json";
+        $.ajax({
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+						myURL
+						+'"&format=json&callback=',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>download</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
+            error: function(data){
+                console.log(data);
+            }
+        });
+		},
+		open: function(){
+				var  myURL = domain + "/open/index/json";
+        $.ajax({
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+						myURL
+						+'"&format=json&callback=',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>open</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
+            error: function(data){
+                console.log(data);
+            }
+        });
+		},
+		logout: function(){
+			logout="";
+			$("#email").html(logout);
+			$("#home-content").html(html);			
+			$("#footer-content").html(footer);
+			return false;			
+		},
+		about: function(){
+			$("#home-content").html(aboutus);			
+			if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+			$("#footer-content").html(footernew);
+			return false;			
+		},
+		contact: function(){
+			$("#home-content").html(contactus);			
+			if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+			$("#footer-content").html(footernew);
+			return false;			
+		},
+
  	
 };
 
@@ -277,12 +471,26 @@ function SendPassword(){
 	$.getJSON('http://www.coingreen.com/Users/SendPassword/'+$("#Email").val(),
 		function(ReturnValues){
 			if(ReturnValues['Password']=="Password Not sent"){
-				$("#emailIcon").attr("class", "glyphicon glyphicon-remove");
-				$("#LoginEmailPassword").hide();
 				return false;
 			}
-			$("#LoginEmailPassword").show();
-			$("#emailIcon").attr("class", "glyphicon glyphicon-ok");
 		}
 	);
 }
+function Authorize(){
+	email = $("#Email").val();
+	password = $("#Loginpassword").val();
+	var  myURL = domain + "/balance/index/json/"+email+"/"+password;
+	$.ajax({
+			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+			myURL
+			+'"&format=json&callback=',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data){
+				},
+			error: function(data){
+					console.log(data);
+			}
+	});
+
+	}
