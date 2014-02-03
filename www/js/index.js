@@ -130,162 +130,6 @@ var app = {
             type: 'GET',
             dataType: 'json',
             success: function(data){
-							$("#UUsers").html(data['query']['results']['json']['result']['users']);
-							$("#UOnline").html(data['query']['results']['json']['result']['online']);							
-							$("#UPending").html(data['query']['results']['json']['result']['PendingOrders']);
-							$("#UCompleted").html(data['query']['results']['json']['result']['CompletedOrders']);							
-							var length = data['query']['results']['json']['result']['DetailPendingOrders']['result'].length,
-							element = null,
-									
-							html = '<table class="table table-condensed table-bordered table-hover"><thead><tr><th>Action</th><th>First</th><th>Second</th><th>Count</th><th>BTC</th><th>Amount</th><th>Price</th></tr></thead><tbody>';
-							for (var i = 0; i < length; i++) {
-								element = data['query']['results']['json']['result']['DetailPendingOrders']['result'][i];
-
-								html = html + '<tr>';
-								html = html + '<td>'+element['_id']['Action']+'</td>';
-								html = html + '<td>'+element['_id']['FirstCurrency']+'</td>';
-								html = html + '<td>'+element['_id']['SecondCurrency']+'</td>';
-								html = html + '<td>'+element['count']+'</td>';								
-								html = html + '<td>'+Math.round(element['Amount']*1000000)/1000000+'</td>';
-								html = html + '<td>'+Math.round(element['TotalAmount']*1000)/1000+'</td>';
-								html = html + '<td>'+Math.round(element['TotalAmount']/element['Amount']*1000)/1000+'</td>';
-								html = html + '</tr>';
-							}
-								html = html + '</tbody></table>';
-								$("#UDetailPendingOrders").html(html);								
-								// Do something with element i.
-							var length = data['query']['results']['json']['result']['DetailCompletedOrders']['result'].length,
-							element = null,
-									
-							html = '<table class="table table-condensed table-bordered table-hover"><thead><tr><th>Action</th><th>First</th><th>Second</th><th>BTC</th><th>Count</th><th>Amount</th><th>Price</th></tr></thead><tbody>';
-							for (var i = 0; i < length; i++) {
-								element = data['query']['results']['json']['result']['DetailCompletedOrders']['result'][i];
-
-								html = html + '<tr>';
-								html = html + '<td>'+element['_id']['Action']+'</td>';
-								html = html + '<td>'+element['_id']['FirstCurrency']+'</td>';
-								html = html + '<td>'+element['_id']['SecondCurrency']+'</td>';
-								html = html + '<td>'+element['count']+'</td>';								
-								html = html + '<td>'+Math.round(element['Amount']*1000000)/1000000+'</td>';
-								html = html + '<td>'+Math.round(element['TotalAmount']*1000)/1000+'</td>';
-								html = html + '<td>'+Math.round(element['TotalAmount']/element['Amount']*1000)/1000+'</td>';
-								html = html + '</tr>';
-							}
-								html = html + '</tbody></table>';
-								$("#UDetailCompletedOrders").html(html);								
-								// Do something with element i.
-
-							var length = data['query']['results']['json']['result']['Details'].length,
-							element = null,BTC=0,GBP=0,USD=0,EUR=0,
-									
-							html = '<table class="table table-condensed table-bordered table-hover"><thead><tr><th>#</th><th>Username</th><th>Verify</th><th>Full Name</th><th>TOTP</th><th>BTC</th><th>GBP</th><th>USD</th><th>EUR</th></tr></thead><tbody>';
-							for (var i = 0; i < length; i++) {
-								element = data['query']['results']['json']['result']['Details'][i];
-
-								html = html + '<tr>';
-								html = html + '<td>'+(i+1)+'</td>';								
-								html = html + '<td><a href="user.html?user='+element['username']+'">'+element['username']+'</a></td>';
-								html = html + '<td>';
-								if(element['BankVerified']=="null"){
-									html = html + '<span class="label">B</span>';
-								}
-								if(element['BankVerified']=="No"){
-									html = html + '<span class="label label-important">B</span>';
-								}
-								if(element['BankVerified']=="Yes"){								
-									html = html + '<span class="label label-success">B</span>';
-								}
-								if(element['GovtVerified']=="null"){
-									html = html + '<span class="label">G</span>';
-								}
-								if(element['GovtVerified']=="No"){
-									html = html + '<span class="label label-important">G</span>';
-								}
-								if(element['GovtVerified']=="Yes"){								
-									html = html + '<span class="label label-success">G</span>';
-								}
-								if(element['UtilVerified']=="null"){
-									html = html + '<span class="label">P</span>';
-								}
-								if(element['UtilVerified']=="No"){
-									html = html + '<span class="label label-important">P</span>';
-								}
-								if(element['UtilVerified']=="Yes"){								
-									html = html + '<span class="label label-success">P</span>';
-								}
-								html = html + '</td>';
-								html = html + '<td>'+element['firstname']+' '+element['lastname']+'</td>';								
-								html = html + '<td>';
-								if(element['TOTPvalidate']=="null"){
-									html = html + '<span class="label">V</span>';
-								}
-								if(element['TOTPvalidate']=="false"){
-									html = html + '<span class="label label-important">V</span>';
-								}
-								if(element['TOTPvalidate']=="true"){								
-									html = html + '<span class="label label-success">V</span>';
-								}								
-								if(element['TOTPlogin']=="null"){
-									html = html + '<span class="label">L</span>';
-								}
-								if(element['TOTPlogin']=="false"){
-									html = html + '<span class="label label-important">L</span>';
-								}
-								if(element['TOTPlogin']=="true"){								
-									html = html + '<span class="label label-success">L</span>';
-								}								
-								if(element['TOTPsecurity']=="null"){
-									html = html + '<span class="label">S</span>';
-								}
-								if(element['TOTPsecurity']=="false"){
-									html = html + '<span class="label label-important">S</span>';
-								}
-								if(element['TOTPsecurity']=="true"){								
-									html = html + '<span class="label label-success">S</span>';
-								}								
-								if(element['TOTPwithdrawal']=="null"){
-									html = html + '<span class="label">W</span>';
-								}
-								if(element['TOTPwithdrawal']=="false"){
-									html = html + '<span class="label label-important">W</span>';
-								}
-								if(element['TOTPwithdrawal']=="true"){								
-									html = html + '<span class="label label-success">W</span>';
-								}								
-								
-								BTC = BTC + Math.round(element['BTC']*10000000)/10000000;
-								BTC = BTC + Math.round(element['Sell']['BTC-GBP']['Amount']*10000000)/10000000;
-								BTC = BTC + Math.round(element['Sell']['BTC-EUR']['Amount']*10000000)/10000000;
-								BTC = BTC + Math.round(element['Sell']['BTC-USD']['Amount']*10000000)/10000000;
-								GBP = GBP + Math.round(element['GBP']*1000)/1000;
-								GBP = GBP + Math.round(element['Buy']['BTC-GBP']['TotalAmount']*1000)/1000;
-								USD = USD + Math.round(element['USD']*1000)/1000;
-								USD = USD + Math.round(element['Buy']['BTC-USD']['TotalAmount']*1000)/1000;
-								EUR = EUR + Math.round(element['EUR']*1000)/1000;
-								EUR = EUR + Math.round(element['Buy']['BTC-EUR']['TotalAmount']*1000)/1000;
-
-
-
-								html = html + '</td>';
-								html = html + '<td>'+(Math.round(element['BTC']*10000000)/10000000).toFixed(10)+'<br>';
-								html = html + (Math.round(element['Sell']['BTC-GBP']['Amount']*10000000)/10000000+Math.round(element['Sell']['BTC-USD']['Amount']*10000000)/10000000+Math.round(element['Sell']['BTC-EUR']['Amount']*10000000)/10000000).toFixed(10);
-								html = html +	'</td>';																
-								html = html + '<td>'+(Math.round(element['GBP']*1000)/1000).toFixed(4)+'<br>';
-								html = html + (Math.round(element['Buy']['BTC-GBP']['TotalAmount']*1000)/1000).toFixed(4)+'</td>';																								
-								html = html + '<td>'+(Math.round(element['USD']*1000)/1000).toFixed(4)+'<br>';
-								html = html + (Math.round(element['Buy']['BTC-USD']['TotalAmount']*1000)/1000).toFixed(4)+'</td>';																								
-								html = html + '<td>'+(Math.round(element['EUR']*1000)/1000).toFixed(4)+'<br>';
-								html = html + (Math.round(element['Buy']['BTC-EUR']['TotalAmount']*1000)/1000).toFixed(4)+'</td>';																								
-								html = html + '</tr>';
-							}
-								html = html + '</tbody></table>';
-								$("#UUsersCount").html(length);								
-								$("#UUsersDetails").html(html);								
-
-						$("#UBTC").html(BTC);
-						$("#UGBP").html(GBP);
-						$("#UEUR").html(EUR);
-						$("#UUSD").html(USD);						
 
 // User Specific functions
 						},
@@ -314,7 +158,8 @@ var app = {
         });
 
 		},
-		balance: function(){
+
+			login: function(){
 				var  myURL = domain + "/balance/index/json";
         $.ajax({
             url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -324,7 +169,70 @@ var app = {
             dataType: 'json',
             success: function(data){
 			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+							htmlnew = '<h2>Deposit</h2>';
+							$("#home-content").html(htmlnew);
+							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+							$("#footer-content").html(footernew);
+							return false;
+							},
+            error: function(data){
+                console.log(data);
+            }
+        });
+		},		
+		balance: function(){
+				var  myURL = domain + "/balance/index/json";
+				if($("#email").html()==""){
+					htmlnew =           '<div class="alert alert-danger">';
+					htmlnew = htmlnew + '	<small>First time users, if your email is not present on the system, we will create a new email and send the "Login Email Password". We will also credit 100 XGC to your account, once you confirm your email address.</small>';
+					htmlnew = htmlnew + '<div><input type="text" name="Email" class="form-control" onBlur="SendPassword();" placeholder="name@email.com" value="" id="Email" /></div>';
+					htmlnew = htmlnew + '</div>';
+					htmlnew = htmlnew + '<div class="alert alert-danger">';
+					htmlnew = htmlnew + '<small>Please check your email in 5 seconds. You will receive "<strong>Login Email Password</strong>" use it in the box below.</small>';
+					htmlnew = htmlnew + '<div><input type="password" name="Loginpassword" class="form-control" maxlength="6" placeholder="123456" id="Loginpassword" /></div>';
+					htmlnew = htmlnew + '</div>';
+					htmlnew = htmlnew + '<a href="#" class="btn btn-primary" onclick="Authorize();" style="color:#000000">Login</a>';
+					
+					$("#home-content").html(htmlnew);
+					if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+					$("#footer-content").html(footernew);					
+					return false;
+				}else{
+					email = $("#email").html();
+					onecode = $("#onecode").val();
+					var  myURL = domain + "/balance/index/json"+'/'+email+'/'+onecode;
+				}
+        $.ajax({
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+						myURL
+						+'"&format=json&callback=',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+							XGC = data['query']['results']['json']['Total']['result']['Amount'];
+				    	fee = data['query']['results']['json']['Total']['result']['Fee'];
+							XGC = XGC - fee;
+							$("#balance").html(XGC);
 							htmlnew = '<h2>Balance</h2>';
+							htmlnew = htmlnew + '<h3>'+ XGC +' XGC</h3>';
+							htmlnew = htmlnew + '<table class="table table-bordered table-condensed table-hover">';
+							htmlnew = htmlnew + '	<tr>';
+							htmlnew = htmlnew + '		<th>Date</th>';
+							htmlnew = htmlnew + '		<th>IP</th>';
+							htmlnew = htmlnew + '		<th>Action</th>';
+							htmlnew = htmlnew + '		<th>Amount XGC</th>';
+							htmlnew = htmlnew + '	</tr>';
+							var length = Object.size(data['query']['results']['json']['transactions']);
+							for (key in data['query']['results']['json']['transactions']) {
+								element = data['query']['results']['json']['transactions'][key];
+									htmlnew = htmlnew + '	<tr>';
+									htmlnew = htmlnew + '		<th>'+element['DateTime']+'</th>';
+									htmlnew = htmlnew + '		<th>'+element['IP']+'</th>';
+									htmlnew = htmlnew + '		<th>'+element['Action']+'</th>';
+									htmlnew = htmlnew + '		<th>'+element['Amount']+' XGC</th>';
+									htmlnew = htmlnew + '	</tr>';
+							}
+								htmlnew = htmlnew + '	</table>';							
 							$("#home-content").html(htmlnew);
 							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
 							$("#footer-content").html(footernew);
@@ -336,25 +244,44 @@ var app = {
         });
 		},
 		send: function(){
-				var  myURL = domain + "/send/index/json";
-        $.ajax({
-            url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
-						myURL
-						+'"&format=json&callback=',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data){
-			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
-							htmlnew = '<h2>Send</h2>';
-							$("#home-content").html(htmlnew);
-							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
-							$("#footer-content").html(footernew);
-							return false;
-							},
-            error: function(data){
-                console.log(data);
-            }
-        });
+				if($("#to_email").html()==""){
+					var  myURL = domain + "/send/index/json";
+					$.ajax({
+							url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+							myURL
+							+'"&format=json&callback=',
+							type: 'GET',
+							dataType: 'json',
+							success: function(data){
+				//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
+								htmlnew = '<h2>Send</h2>';
+								htmlnew = htmlnew +'<div>';
+								htmlnew = htmlnew +'	<input type="hidden" name="Error" id="Error" value="Yes" />';
+								htmlnew = htmlnew +'</div><div class="form-group has-error">';
+								htmlnew = htmlnew +'	<div class="alert alert-danger">';
+								htmlnew = htmlnew +'	<small>Email Address to whom you want to send XGC </small>';
+								htmlnew = htmlnew +'<div><input type="text" name="email" class="form-control" onBlur="CheckEmail(this.value);" placeholder="name@email.com" value="" id="Email" /></div>					</div>';
+								htmlnew = htmlnew +'<small id="EmailError">If the user does not claim the amount within a week, then the amount will be returned (credited) back to your account.</small>';
+								htmlnew = htmlnew +'</div>';
+								htmlnew = htmlnew +'<div class="form-group has-error" >';
+								htmlnew = htmlnew +'<div class="alert alert-danger">';
+								htmlnew = htmlnew +'<small>XGC Amount from your balance: </small>';
+								htmlnew = htmlnew +'<div><input type="text" name="Amount" class="form-control" maxlength="12" placeholder="99.001" max="'+$("balance").html()+'" onFocus="initialAmount();" onBlur="CheckAmount(this.value,'+$("balance").html()+');" id="Amount" /></div>					</div>';
+								htmlnew = htmlnew +'<small id="amountError"></small>';
+								htmlnew = htmlnew +'</div>';
+								htmlnew = htmlnew +'<a href="#" class="btn btn-primary" id="SendButton" style="color:#000000" onclick="SendNow();">Send now!</a>';
+								$("#home-content").html(htmlnew);
+								if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
+								$("#footer-content").html(footernew);
+								return false;
+								},
+							error: function(data){
+								console.log(data);
+							}
+					});
+				}else{
+					
+				}
 		},
 			deposit: function(){
 				var  myURL = domain + "/deposit/index/json";
@@ -479,6 +406,7 @@ function SendPassword(){
 function Authorize(){
 	email = $("#Email").val();
 	password = $("#Loginpassword").val();
+	
 	var  myURL = domain + "/balance/index/json/"+email+"/"+password;
 	$.ajax({
 			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -487,10 +415,73 @@ function Authorize(){
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
-				},
+				id = 	data['query']['results']['json']['userIn']['id']['_id'];
+				email = 	data['query']['results']['json']['userIn']['email'];	
+				$("#email").html(email);
+				$("#user_id").html(id);
+				$("#onecode").html(password);				
+				app.balance();
+			},
 			error: function(data){
 					console.log(data);
 			}
 	});
+}
+function SendNow(){
+	email = $("#Email").val();
+	password = $("#Loginpassword").val();
+	
+	var  myURL = domain + "/send/index/json/"+email+"/"+password;
+	$.ajax({
+			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+			myURL
+			+'"&format=json&callback=',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data){
+				id = 	data['query']['results']['json']['userIn']['id']['_id'];
+				email = 	data['query']['results']['json']['userIn']['email'];	
+				$("#email").html(email);
+				$("#user_id").html(id);
+				$("#onecode").html(password);				
+				app.balance();
+			},
+			error: function(data){
+					console.log(data);
+			}
+	});
+}
 
+function CheckEmail(value){
+	if(value==""){
+		$("#EmailError").html("Cannot be blank!");		
+		$("#Error").val("Yes");		
+		return false;
 	}
+	email = $("#email").html();
+	if(email==""){		return false;}
+	if(value.toLowerCase()==email.toLowerCase()){
+		$("#EmailError").html("Cannot send to self!");
+		$("#Error").val("Yes");		
+		return false;
+	}else{
+		$("#to_email").html(value);
+		$("#EmailError").html("If the user does not claim the amount within a week, then the amount will be returned (credited) back to your account.");
+		$("#Error").val("No");
+	}
+}
+function CheckAmount(value,amount){
+	if(value>=amount)	{
+		$("#amountIcon").attr("class", "glyphicon glyphicon-remove");
+		$("#amountError").html("Amount does not match!")
+		return false;
+	}else{
+		$("#amountIcon").attr("class", "glyphicon glyphicon-ok");		
+		if($("#Error").val()=="No"){
+			$("#SendButton").removeAttr('disabled');
+		}else{
+			$("#EmailError").html("Cannot send to self! or email blank!");			
+			$("#SendButton").attr("disabled", "disabled");			
+		}
+	}
+}
