@@ -367,7 +367,6 @@ var app = {
 			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
 							htmlnew = '<h2>Download</h2>';
 							htmlnew = 	htmlnew +'<div class="container">';
-							htmlnew = 	htmlnew +'<h2>Download</h2>';
 							htmlnew = 	htmlnew +'<h3>Windows</h3>';
 							htmlnew = 	htmlnew +'<a href="https://sourceforge.net/projects/coingreen/files/Windows/" target="_blank"><img src="http://coingreen.com/img/Windows-icon.png" alt="Windows - CoinGreen" title="Windows - CoinGreen"></a>';
 							htmlnew = 	htmlnew +'<h3>Linux</h3>';
