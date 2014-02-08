@@ -184,11 +184,11 @@ var app = {
 				var  myURL = domain + "/balance/index/json";
 				if($("#email").html()==""){
 					htmlnew =           '<div class="alert alert-danger">';
-					htmlnew = htmlnew + '	<small>First time users, if your email is not present on the system, we will create a new email and send the "Login Email Password". We will also credit 100 XGC to your account, once you confirm your email address.</small>';
+					htmlnew = htmlnew + '	First time users, if your email is not present on the system, we will create a new email and send the "Login Email Password". We will also credit 100 XGC to your account, once you confirm your email address.';
 					htmlnew = htmlnew + '<div><input type="text" name="Email" class="form-control" onBlur="SendPassword();" placeholder="name@email.com" value="" id="Email" /></div>';
 					htmlnew = htmlnew + '</div>';
 					htmlnew = htmlnew + '<div class="alert alert-danger">';
-					htmlnew = htmlnew + '<small>Please check your email in 5 seconds. You will receive "<strong>Login Email Password</strong>" use it in the box below.</small>';
+					htmlnew = htmlnew + 'Please check your email in 5 seconds. You will receive "<strong>Login Email Password</strong>" use it in the box below.';
 					htmlnew = htmlnew + '<div><input type="password" name="Loginpassword" class="form-control" maxlength="6" placeholder="123456" id="Loginpassword" /></div>';
 					htmlnew = htmlnew + '</div>';
 					htmlnew = htmlnew + '<a href="#" class="btn btn-primary" onclick="Authorize();" style="color:#000000">Login</a>';
@@ -226,10 +226,11 @@ var app = {
 							for (key in data['query']['results']['json']['transactions']) {
 								element = data['query']['results']['json']['transactions'][key];
 									htmlnew = htmlnew + '	<tr>';
-									htmlnew = htmlnew + '		<th>'+element['DateTime']+'</th>';
-									htmlnew = htmlnew + '		<th>'+element['IP']+'</th>';
-									htmlnew = htmlnew + '		<th>'+element['Action']+'</th>';
-									htmlnew = htmlnew + '		<th>'+element['Amount']+' XGC</th>';
+									date = new Date(element['DateTime']*1000);
+									htmlnew = htmlnew + '		<td>'+formatDate(date,'%Y-%M-%d %H:%m')+'</td>';									
+									htmlnew = htmlnew + '		<td>'+element['IP']+'</td>';
+									htmlnew = htmlnew + '		<td>'+element['Action']+'</td>';
+									htmlnew = htmlnew + '		<td style="text-align:right">'+element['Amount']+' XGC</td>';
 									htmlnew = htmlnew + '	</tr>';
 							}
 								htmlnew = htmlnew + '	</table>';							
@@ -244,6 +245,11 @@ var app = {
         });
 		},
 		send: function(){
+				if($("#email").html()==""){
+					app.balance();
+					return false;
+				}
+
 				if($("#to_email").html()==""){
 					var  myURL = domain + "/send/index/json";
 					$.ajax({
@@ -259,15 +265,15 @@ var app = {
 								htmlnew = htmlnew +'	<input type="hidden" name="Error" id="Error" value="Yes" />';
 								htmlnew = htmlnew +'</div><div class="form-group has-error">';
 								htmlnew = htmlnew +'	<div class="alert alert-danger">';
-								htmlnew = htmlnew +'	<small>Email Address to whom you want to send XGC </small>';
+								htmlnew = htmlnew +'	Email Address to whom you want to send XGC ';
 								htmlnew = htmlnew +'<div><input type="text" name="email" class="form-control" onBlur="CheckEmail(this.value);" placeholder="name@email.com" value="" id="Email" /></div>					</div>';
-								htmlnew = htmlnew +'<small id="EmailError">If the user does not claim the amount within a week, then the amount will be returned (credited) back to your account.</small>';
+								htmlnew = htmlnew +'<div id="EmailError">If the user does not claim the amount within a week, then the amount will be returned (credited) back to your account.</div>';
 								htmlnew = htmlnew +'</div>';
 								htmlnew = htmlnew +'<div class="form-group has-error" >';
 								htmlnew = htmlnew +'<div class="alert alert-danger">';
-								htmlnew = htmlnew +'<small>XGC Amount from your balance: </small>';
-								htmlnew = htmlnew +'<div><input type="text" name="Amount" class="form-control" maxlength="12" placeholder="99.001" max="'+$("balance").html()+'" onFocus="initialAmount();" onBlur="CheckAmount(this.value,'+$("balance").html()+');" id="Amount" /></div>					</div>';
-								htmlnew = htmlnew +'<small id="amountError"></small>';
+								htmlnew = htmlnew +'XGC Amount from your balance:';
+								htmlnew = htmlnew +'<div><input type="text" name="toAmount" class="form-control" maxlength="12" placeholder="99.001" max="'+$("balance").html()+'" onFocus="initialAmount();" onBlur="CheckAmount(this.value,'+$("balance").html()+');" id="toAmount" /></div>					</div>';
+								htmlnew = htmlnew +'<div id="amountError"></div>';
 								htmlnew = htmlnew +'</div>';
 								htmlnew = htmlnew +'<a href="#" class="btn btn-primary" id="SendButton" style="color:#000000" onclick="SendNow();">Send now!</a>';
 								$("#home-content").html(htmlnew);
@@ -280,11 +286,17 @@ var app = {
 							}
 					});
 				}else{
-					
+
 				}
 		},
 			deposit: function(){
-				var  myURL = domain + "/deposit/index/json";
+					if($("#email").html()==""){
+						app.balance();
+						return false;						
+					}
+
+				email = $("#email").html();				
+				var  myURL = domain + "/deposit/index/json"+"/"+email;
         $.ajax({
             url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
 						myURL
@@ -294,6 +306,20 @@ var app = {
             success: function(data){
 			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
 							htmlnew = '<h2>Deposit</h2>';
+							htmlnew = htmlnew +'<div class="container">';
+							htmlnew = htmlnew +'<h2>Hi '+email+'</h2>';
+							htmlnew = htmlnew +'<div style="text-align:center ">';
+							htmlnew = htmlnew +'<h4><strong>Send XGC to</strong>:<br>';
+							htmlnew = htmlnew +data['query']['results']['json']['address']+'</h4>';
+							htmlnew = htmlnew +'<img src="http://coingreen.com/'+data['query']['results']['json']['dir']+data['query']['results']['json']['address']+'.png" style="border:1px solid black"><br>';
+							htmlnew = htmlnew +'<br>';
+							htmlnew = htmlnew +'<p>You can also use this address to receive XGC from friends or websites.</p>';
+							htmlnew = htmlnew +'<p>A new address will be automatically generated, when we receive payment on this address.<br>';
+							htmlnew = htmlnew +'The old address will still be valid for depositing XGC.</p>';
+							htmlnew = htmlnew +'</div>';
+							htmlnew = htmlnew +'</div>';
+
+							
 							$("#home-content").html(htmlnew);
 							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
 							$("#footer-content").html(footernew);
@@ -305,6 +331,10 @@ var app = {
         });
 		},
 		withdraw: function(){
+				if($("#email").html()==""){
+					app.balance();
+					return false;						
+				}
 				var  myURL = domain + "/withdraw/index/json";
         $.ajax({
             url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -335,7 +365,18 @@ var app = {
             dataType: 'json',
             success: function(data){
 			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
-							htmlnew = '<h2>download</h2>';
+							htmlnew = '<h2>Download</h2>';
+							htmlnew = 	htmlnew +'<div class="container">';
+							htmlnew = 	htmlnew +'<h2>Download</h2>';
+							htmlnew = 	htmlnew +'<h3>Windows</h3>';
+							htmlnew = 	htmlnew +'<a href="https://sourceforge.net/projects/coingreen/files/Windows/" target="_blank"><img src="http://coingreen.com/img/Windows-icon.png" alt="Windows - CoinGreen" title="Windows - CoinGreen"></a>';
+							htmlnew = 	htmlnew +'<h3>Linux</h3>';
+							htmlnew = 	htmlnew +'<a href="https://sourceforge.net/projects/coingreen/files/Linux/" target="_blank"><img src="http://coingreen.com/img/Linux-icon.png" alt="Linux - CoinGreen" title="Linux - CoinGreen"></a>';
+							htmlnew = 	htmlnew +'<h3>Ubuntu</h3>';
+							htmlnew = 	htmlnew +'<a href="https://sourceforge.net/projects/coingreen/files/Ubuntu/" target="_blank"><img src="http://coingreen.com/img/Ubuntu-icon.png" alt="Ubuntu - CoinGreen" title="Ubuntu - CoinGreen"></a>';
+							htmlnew = 	htmlnew +'<h3>Android</h3>';
+							htmlnew = 	htmlnew +'<a href="https://sourceforge.net/projects/coingreen/files/Andriod/" target="_blank"><img src="http://coingreen.com/img/Android-icon.png" alt="Android - CoinGreen" title="Android - CoinGreen"></a>';
+							htmlnew = 	htmlnew +'</div>';
 							$("#home-content").html(htmlnew);
 							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
 							$("#footer-content").html(footernew);
@@ -356,7 +397,10 @@ var app = {
             dataType: 'json',
             success: function(data){
 			//				data['query']['results']['json']['Total']['result']['_id']['Amount']);
-							htmlnew = '<h2>open</h2>';
+							htmlnew = '<h2>Open Source</h2>';
+							htmlnew = 	htmlnew +'<div class="container">';
+							htmlnew = 	htmlnew +'<a href="https://github.com/GreenCoin-Project/GreenCoin" target="_blank">CoinGreen</a>';
+							htmlnew = 	htmlnew +'</div>							';
 							$("#home-content").html(htmlnew);
 							if($("#email").html()!=""){footernew = footerSignin + footer;}else{footernew = footerLogout + footer;}
 							$("#footer-content").html(footernew);
@@ -428,10 +472,13 @@ function Authorize(){
 	});
 }
 function SendNow(){
-	email = $("#Email").val();
-	password = $("#Loginpassword").val();
+
+	email = $("#email").html();
+	to_email = $("#to_email").html();
+	$("#amount").val($("#toAmount").val()); 
+	amount = $("#toAmount").val();
 	
-	var  myURL = domain + "/send/index/json/"+email+"/"+password;
+	var  myURL = domain + "/send/index/json/"+email+"/"+to_email+"/"+amount;
 	$.ajax({
 			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
 			myURL
@@ -439,11 +486,8 @@ function SendNow(){
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
-				id = 	data['query']['results']['json']['userIn']['id']['_id'];
-				email = 	data['query']['results']['json']['userIn']['email'];	
-				$("#email").html(email);
-				$("#user_id").html(id);
-				$("#onecode").html(password);				
+				$("#to_email").html('');
+				$("#amount").val('');
 				app.balance();
 			},
 			error: function(data){
@@ -484,4 +528,39 @@ function CheckAmount(value,amount){
 			$("#SendButton").attr("disabled", "disabled");			
 		}
 	}
+}
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+function formatDate(date, fmt) {
+    function pad(value) {
+        return (value.toString().length < 2) ? '0' + value : value;
+    }
+    return fmt.replace(/%([a-zA-Z])/g, function (_, fmtCode) {
+        switch (fmtCode) {
+        case 'Y':
+            return date.getUTCFullYear();
+        case 'M':
+            return pad(date.getUTCMonth() + 1);
+        case 'd':
+            return pad(date.getUTCDate());
+        case 'H':
+            return pad(date.getUTCHours());
+        case 'm':
+            return pad(date.getUTCMinutes());
+        case 's':
+            return pad(date.getUTCSeconds());
+        default:
+            throw new Error('Unsupported format code: ' + fmtCode);
+        }
+    });
+}
+function initialAmount(){
+	var value = $("#balance").html();
+	$("#amountError").html("Amount should be less than "+ value);
 }
